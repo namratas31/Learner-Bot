@@ -70,8 +70,7 @@ function checkSpelling() {
 
 
 function nextWord() {
-    currentWordIndex++;;
-    // console.log(currentWordIndex)
+    currentWordIndex++;
     document.getElementById('spellingResult').textContent = '';
     document.getElementById('spellingInput').value = ''; // Clear input field
     if (currentWordIndex < wordsToSpell) {
@@ -83,6 +82,7 @@ function nextWord() {
         document.getElementById('spellingInput').style.display = 'none';
         document.getElementById('checkButton').style.display = 'none';
         document.getElementById('nextButton').style.display = 'none';
+        document.getElementById('listen').style.display = 'none';
         document.getElementById('finalResult').style.display = 'block';
         document.getElementById('finalResult').textContent = `You spelled ${correctWords} out of ${wordsToSpell} words correctly.`;
     }
