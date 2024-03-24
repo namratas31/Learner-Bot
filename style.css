@@ -126,7 +126,7 @@
 {
     height:600px;
     width: 600px;
-    background-image: url("im.gif");
+    background-image: url("assets/im.gif");
     background-size: contain;
     background-repeat: no-repeat;
 }
