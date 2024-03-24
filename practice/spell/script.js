@@ -26,7 +26,7 @@ async function getword()
 
 
 function speakWord(word) {
-    const msg = new SpeechSynthesisUtterance(`Please spell: ${word}`);
+    const msg = new SpeechSynthesisUtterance(`Please Write word: ${word}`);
     msg.onend = function() {
         // After speaking the word, show the input field
         document.getElementById('spellingInput').style.display = 'inline-block';
@@ -92,7 +92,7 @@ function nextWord() {
 
 
 function speakAgain(){
-    const msg = new SpeechSynthesisUtterance(`Please spell: ${data}`);
+    const msg = new SpeechSynthesisUtterance(`Please Write word: ${data}`);
     window.speechSynthesis.speak(msg);
 
 }
