@@ -25,79 +25,19 @@
  
   <div class="content">
     <input type="text" id="spellingInput" style="display: none;" placeholder="Enter spelling">
+    
     <div class="button-group">
-      <button onclick="startExercise()" id="startButton">Start</button>
-      <button onclick="checkSpelling()" id="checkButton" style="display: none;">Check</button>
-      <button onclick="nextWord()" id="nextButton" style="display: none;" disabled>Next</button>
+      <button id="startButton">Start</button>
+      <button id="checkButton" style="display: none;">Check</button>
+      <button id="listen" style="display: none;">listen</button>
+      <button id="nextButton" style="display: none;" disabled>Next</button>
+      
     </div>
     <p id="spellingResult"></p>
     <p id="finalResult"></p>
 </div>
 
-<script>
-    const wordsToSpell = ["different", "visible", "automobile"];
-    let currentWordIndex = 0;
-    let correctWords = 0;
-
-    function speakWord(word) {
-        const msg = new SpeechSynthesisUtterance(`Please spell: ${word}`);
-        msg.onend = function() {
-            // After speaking the word, show the input field
-            document.getElementById('spellingInput').style.display = 'block';
-            document.getElementById('spellingInput').focus();
-            // Hide the start button and show the check button and next button
-            document.getElementById('startButton').style.display = 'none';
-            document.getElementById('checkButton').style.display = 'inline-block';
-            document.getElementById('nextButton').style.display = 'inline-block';
-        };
-        msg.onerror = function() {
-            // If an error occurs during speech synthesis, show the input field
-            document.getElementById('spellingInput').style.display = 'block';
-            document.getElementById('spellingInput').focus();
-            // Hide the start button and show the check button and next button
-            document.getElementById('startButton').style.display = 'none';
-            document.getElementById('checkButton').style.display = 'inline-block';
-            document.getElementById('nextButton').style.display = 'inline-block';
-        };
-        window.speechSynthesis.speak(msg);
-        document.getElementById('nextButton').disabled = true;
-    }
-
-    function checkSpelling() {
-        const userSpelling = document.getElementById('spellingInput').value.toLowerCase();
-        const spokenWord = wordsToSpell[currentWordIndex];
-
-        if (userSpelling === spokenWord) {
-            document.getElementById('spellingResult').textContent = 'Correct spelling!';
-            correctWords++;
-        } else {
-            document.getElementById('spellingResult').textContent = 'Incorrect spelling!';
-        }
-
-        document.getElementById('nextButton').disabled = false;
-    }
-
-    function nextWord() {
-        currentWordIndex++;
-        document.getElementById('spellingResult').textContent = '';
-        document.getElementById('spellingInput').value = ''; // Clear input field
-        if (currentWordIndex < wordsToSpell.length) {
-            speakWord(wordsToSpell[currentWordIndex]);
-        } else {
-            const msg = new SpeechSynthesisUtterance(`All done for today`);
-            window.speechSynthesis.speak(msg);
-            document.getElementById('spellingInput').style.display = 'none';
-            document.getElementById('checkButton').style.display = 'none';
-            document.getElementById('nextButton').style.display = 'none';
-            document.getElementById('finalResult').style.display = 'block';
-            document.getElementById('finalResult').textContent = `You spelled ${correctWords} out of ${wordsToSpell.length} words correctly.`;
-        }
-    }
-
-    function startExercise() {
-        speakWord(wordsToSpell[currentWordIndex]);
-    }
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>

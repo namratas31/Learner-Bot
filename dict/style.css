@@ -103,3 +103,17 @@ h1{
     color: #fff6f6;
     cursor: pointer;
 }
+
+#word{
+    font-weight: bold;
+}
+#meaning
+{
+    font-weight: bold;
+}
+.wordDisplay1{
+    width: 50%;
+}
+.wordDisplay2{
+    width: 50%;
+}

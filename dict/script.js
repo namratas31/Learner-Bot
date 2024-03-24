@@ -1,31 +1,56 @@
-const words = [
-    { word: 'Revert :', meaning: 'to come or go back' },
-    { word: 'Difference :', meaning: 'the amount by which people or things are not the same' },
-    { word: 'Spacious :', meaning: 'having a lot of space; large in size' }
-  ];
-
   let currentIndex = 0;
 
-  function displayWord() {
-    const wordElement = document.getElementById('word');
-    const meaningElement = document.getElementById('meaning');
+  let url="https://random-word-api.herokuapp.com/word";
+  let url2="https://api.dictionaryapi.dev/api/v2/entries/en/";
+  
+  async function getword()
+  {
+      try{
+        const wordElement = document.getElementById('word');
+        const meaningElement = document.getElementById('meaning');
 
-    if (currentIndex < words.length) {
-      const currentWord = words[currentIndex];
-      wordElement.innerHTML = `<strong>${currentWord.word}</strong>`;
-      meaningElement.textContent = currentWord.meaning;
-    } else {
-      wordElement.textContent = "That's all for today!";
-      meaningElement.textContent = '';
-      document.getElementById('next-btn').style.display = 'none';
-    }
+        if(currentIndex==3){
+          wordElement.textContent = "That's all for today!";
+          meaningElement.textContent = '';
+          document.getElementById('next-btn').style.display = 'none';
+          document.querySelector('.wordDisplay2').style.display = 'none';
+          document.querySelector('.wordDisplay1').style.width = 100;
+        }
+        else if(currentIndex<3)
+        {
+        
+          let word=await fetch(url);
+          let data=await word.json();
+          let mean =await fetch(url2+data);
+          let data2=await mean.json();
+
+          wordElement.textContent = '';
+          meaningElement.textContent = '';
+          // if(mean!=''){/
+
+          
+          meaningElement.innerHTML=`${data2[0].meanings[0].definitions[0].definition}`;
+          wordElement.innerHTML=`${data}`;
+         
+          // }
+
+          console.log(data);
+          console.log(data2);
+          console.log(data2[0].meanings[0].definitions[0].definition);
+          
+        }
+      }
+        
+      catch(e){
+        getword();
+          console.log(e);
+     }
   }
-
+  
   function nextWord() {
     currentIndex++;
-    displayWord();
+    getword();
   }
-
   document.getElementById('next-btn').addEventListener('click', nextWord);
 
-  displayWord();
+   getword();

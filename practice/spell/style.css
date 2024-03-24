@@ -64,6 +64,7 @@
 .content {
     height: 600px;
     width: 700px;
+    /* display: flex; */
     margin: auto;
 }
 
@@ -84,7 +85,8 @@
 
 #spellingInput {
     margin-top: 220px;
-    margin-left: 210px;
+    margin-left: 270px;
+    
     height: 40px;
     width: 300px;
     padding-left: 20px;
@@ -123,4 +125,17 @@
     margin-left: 210px;
     font-size: larger;
     font-family: "Rubik", "helvetica", "sans-serif";
+}
+#listen{
+    
+
+    margin-top: 50px;
+    margin-left: 30px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    height: 40px;
+    width: 100px;
+
+
+
 }
