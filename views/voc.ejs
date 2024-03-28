@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- <link rel="stylesheet" href="voc.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+  
+  <title>Test</title>
+
+  <style>
+
+
+
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    color: #25362e;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+/* header */
+
+.navbar {
+    height: 100px;
+    background-color: #042f1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    border-bottom: 1.2px solid #25362e;
+}
+
+.navbar a {
+    text-decoration: none;
+    font-family: "Arial", "Helvetica", "sans-serif";
+    color: #fff6f6;
+    font-weight: 400;
+    margin-top: 20px;
+}
+
+#logo {
+    width: 320px;
+    text-align: center;
+    margin-top: 14px;
+    background-image: url("im.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    color: #fff6f6;
+    font-family: "rubik";
+    justify-content: space-evenly;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+#contact {
+    height: 38px;
+    width: 110px;
+    background-color: #d4ed6d;
+    border-radius: 4px;
+    border: none;
+    margin-top: 10px;
+    color: #02110a;
+    font-weight: 700;
+    position: relative;
+    cursor: pointer;
+    margin-right: 100px;
+}
+
+/* container */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    color: #25362e;
+    margin-top: 80px;
+    font-size: 50px;
+    border-bottom: 0.5px solid #25362e;
+}
+
+#quiz {
+    margin-top: 50px;
+}
+
+#question
+{
+    color: brown;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+#options {
+    margin-top: 10px;
+    padding-left: 110px;
+    font-size: 20px;
+    text-align: left;
+}
+
+#options label{
+    padding: 10px;
+}
+
+button {
+    margin: 10px;
+    height: 40px;
+    width: 100px;
+}
+
+#result
+{
+    margin: 30px;
+    font-size: 20px;
+    color: rgb(215 88 167);
+}
+
+
+
+  </style>
+  
+</head>
+<body>
+   
+  <header>
+    <div class="navbar">
+        <div id="logo">
+          AI based <br>Learner Bot
+        </div>
+        <button id="contact" onclick="javascript:history.back()">BACK</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>Vocabulary Quiz</h1>
+    <div id="quiz">
+        <p id="question"></p>
+        <div id="options"></div>
+        <div id="buttonContainer">
+            <button id="submitBtn">Submit</button>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+    <div id="result" style="display: none;"></div>
+</div>
+
+<!-- <script src="voc.js"></script> -->
+
+<script>
+
+let currentQuestion = 0;
+let score = 0;
+
+const questions = [
+    {
+        question: "What is the synonym of the word 'happy'?",
+        options: ["Sad", "Joyful", "Angry"],
+        correctAnswer: 1
+    },
+    {
+        question: "What is the antonym of the word 'hot'?",
+        options: ["Cold", "Warm", "Boiling"],
+        correctAnswer: 0
+    },
+    {
+        question: "What is the synonym of the word 'big'?",
+        options: ["Small", "Large", "Tiny"],
+        correctAnswer: 1
+    }
+];
+
+const questionElement = document.getElementById('question');
+const optionsElement = document.getElementById('options');
+const submitBtn = document.getElementById('submitBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resultContainer = document.getElementById('result');
+
+function displayQuestion() {
+    const question = questions[currentQuestion];
+    questionElement.textContent = question.question;
+    optionsElement.innerHTML = '';
+
+    question.options.forEach((option, index) => {
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'answer';
+        input.value = index;
+        const label = document.createElement('label');
+        label.textContent = option;
+        const div = document.createElement('div');
+        div.appendChild(input);
+        div.appendChild(label);
+        optionsElement.appendChild(div);
+    });
+
+    // Disable Next button for the first question
+    if (currentQuestion === 0) {
+        nextBtn.disabled = true;
+    }
+}
+
+displayQuestion();
+
+submitBtn.addEventListener('click', function() {
+    const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+    if (selectedAnswer) {
+        const answerIndex = parseInt(selectedAnswer.value);
+        if (answerIndex === questions[currentQuestion].correctAnswer) {
+            resultContainer.textContent = 'Correct!';
+            score++;
+        } else {
+            resultContainer.textContent = 'Wrong!';
+        }
+        resultContainer.style.display = 'block';
+        submitBtn.disabled = true;
+        nextBtn.disabled = false;
+    } else {
+        alert('Please select an answer.');
+    }
+});
+
+nextBtn.addEventListener('click', function() {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        displayQuestion();
+        resultContainer.style.display = 'none';
+        submitBtn.disabled = false;
+        nextBtn.disabled = true;
+    } else {
+        resultContainer.textContent = `Your Score: ${score} out of ${questions.length}`;
+        resultContainer.style.display = 'block';
+        document.getElementById('quiz').style.display = 'none';
+    }
+});
+
+</script>
+
+
+</body>
+</html>

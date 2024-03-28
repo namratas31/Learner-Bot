@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  
+  <!-- <link rel="stylesheet" href="spell.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+  <title>Word Spelling Checker</title>
+  <style>
+    * {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    color: #25362e;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+/* header */
+
+.navbar {
+    height: 100px;
+    background-color: #042f1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    border-bottom: 1.2px solid #25362e;
+}
+
+.navbar a {
+    text-decoration: none;
+    font-family: "Arial", "Helvetica", "sans-serif";
+    color: #fff6f6;
+    font-weight: 400;
+    margin-top: 20px;
+}
+
+#logo {
+    width: 320px;
+    text-align: center;
+    margin-top: 14px;
+    background-image: url("im.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    color: #fff6f6;
+    font-family: "rubik";
+    justify-content: space-evenly;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+#contact {
+    height: 38px;
+    width: 110px;
+    background-color: #d4ed6d;
+    border-radius: 4px;
+    border: none;
+    margin-top: 10px;
+    color: #02110a;
+    font-weight: 700;
+    position: relative;
+    cursor: pointer;
+    margin-right: 100px;
+}
+
+/* content */
+
+.content {
+    height: 600px;
+    width: 700px;
+    /* display: flex; */
+    margin: auto;
+}
+
+#startButton {
+    margin-top: 250px;
+    margin-left: 300px;
+    height: 50px;
+    width: 120px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+}
+
+
+.button-group {
+    display: flex;
+    align-items: center;
+}
+
+#spellingInput {
+    margin-top: 220px;
+    margin-left: 270px;
+    
+    height: 40px;
+    width: 300px;
+    padding-left: 20px;
+    font-family: "Rubik", "helvetica", "sans-serif";
+}
+
+
+#checkButton {
+    margin-top: 50px;
+    margin-left: 250px;
+    height: 40px;
+    width: 100px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+}
+
+#nextButton {
+    margin-top: 50px;
+    margin-left: 30px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    height: 40px;
+    width: 100px;
+}
+
+#spellingResult {
+    margin-top: 50px;
+    margin-left: 250px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+}
+
+#finalResult
+{
+    margin-top: 250px;
+    margin-left: 210px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+}
+#listen{
+    
+
+    margin-top: 50px;
+    margin-left: 30px;
+    font-size: larger;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    height: 40px;
+    width: 100px;
+
+
+
+}
+  </style>
+  
+</head>
+<body>
+  <header>
+    <div class="navbar">
+        <div id="logo">
+          AI based <br>Learner Bot
+        </div>
+        <button id="contact" onclick="javascript:history.back()">BACK</button>
+    </div>
+  </header>
+
+ 
+  <div class="content">
+    <input type="text" id="spellingInput" style="display: none;" placeholder="Enter spelling">
+    
+    <div class="button-group">
+      <button id="startButton">Start</button>
+      <button id="checkButton" style="display: none;">Check</button>
+      <button id="listen" style="display: none;">listen</button>
+      <button id="nextButton" style="display: none;" disabled>Next</button>
+      
+    </div>
+    <p id="spellingResult"></p>
+    <p id="finalResult"></p>
+</div>
+
+<!-- <script src="spell.js"></script> -->
+
+<script>
+
+
+
+
+let url="https://random-word-api.herokuapp.com/word";
+
+const wordsToSpell = 3;
+let currentWordIndex = 0;
+let correctWords = 0;
+let data;
+
+async function getword()
+{
+    try{
+    const word=await fetch(url);
+    data= await word.json();
+    console.log(data);
+
+    speakWord(data[0]);
+
+
+    document.getElementById('startButton').disabled = false;
+    }
+    catch(e){
+        console.log(e);
+    }
+}
+
+
+
+function speakWord(word) {
+    const msg = new SpeechSynthesisUtterance(`Please Write word: ${word}`);
+    msg.onend = function() {
+        // After speaking the word, show the input field
+        document.getElementById('spellingInput').style.display = 'inline-block';
+        document.getElementById('listen').style.display = 'inline-block';
+        document.getElementById('spellingInput').focus();
+        // Hide the start button and show the check button and next button
+        document.getElementById('startButton').style.display = 'none';
+        document.getElementById('checkButton').style.display = 'inline-block';
+        document.getElementById('nextButton').style.display = 'inline-block';
+    };
+    window.speechSynthesis.speak(msg);
+    document.getElementById('checkButton').disabled = false;
+    document.getElementById('nextButton').disabled = true;
+}
+
+
+
+
+
+
+function checkSpelling() {
+    const userSpelling = document.getElementById('spellingInput').value.toLowerCase();
+    const spokenWord = data[0];
+
+
+
+    if (userSpelling === spokenWord) {
+        document.getElementById('spellingResult').textContent = 'Correct spelling!';
+        correctWords++;
+    } else {
+        document.getElementById('spellingResult').textContent = 'Incorrect spelling!';
+    }
+
+    document.getElementById('checkButton').disabled = true;
+    document.getElementById('nextButton').disabled = false;
+}
+
+
+
+
+
+
+function nextWord() {
+    currentWordIndex++;
+    document.getElementById('spellingResult').textContent = '';
+    document.getElementById('spellingInput').value = ''; // Clear input field
+    if (currentWordIndex < wordsToSpell) {
+        console.log(currentWordIndex);
+       getword();
+    } else{
+        const msg = new SpeechSynthesisUtterance(`All done for today`);
+        window.speechSynthesis.speak(msg);
+        document.getElementById('spellingInput').style.display = 'none';
+        document.getElementById('checkButton').style.display = 'none';
+        document.getElementById('nextButton').style.display = 'none';
+        document.getElementById('listen').style.display = 'none';
+        document.getElementById('finalResult').style.display = 'block';
+        document.getElementById('finalResult').textContent = `You spelled ${correctWords} out of ${wordsToSpell} words correctly.`;
+    }
+}
+
+
+
+
+function speakAgain(){
+    const msg = new SpeechSynthesisUtterance(`Please Write word: ${data}`);
+    window.speechSynthesis.speak(msg);
+
+}
+
+
+
+
+    document.querySelector("#startButton").addEventListener('click',getword);
+    document.querySelector("#checkButton").addEventListener('click',checkSpelling);
+    document.querySelector("#listen").addEventListener('click',speakAgain)
+    document.querySelector("#nextButton").addEventListener('click',nextWord)
+
+  
+
+
+
+
+</script>
+
+</body>
+</html>

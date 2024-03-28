@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- <link rel="stylesheet" href="set.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  
+  <title>Sentence Framing</title>
+  <style>
+
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    color: #25362e;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+/* header */
+
+.navbar {
+    height: 100px;
+    background-color: #042f1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    border-bottom: 1.2px solid #25362e;
+}
+
+.navbar a {
+    text-decoration: none;
+    font-family: "Arial", "Helvetica", "sans-serif";
+    color: #fff6f6;
+    font-weight: 400;
+    margin-top: 20px;
+}
+
+#logo {
+    width: 320px;
+    text-align: center;
+    margin-top: 14px;
+    background-image: url("im.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    color: #fff6f6;
+    font-family: "rubik";
+    justify-content: space-evenly;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+#contact {
+    height: 38px;
+    width: 110px;
+    background-color: #d4ed6d;
+    border-radius: 4px;
+    border: none;
+    margin-top: 10px;
+    color: #02110a;
+    font-weight: 700;
+    position: relative;
+    cursor: pointer;
+    margin-right: 100px;
+}
+
+/* container */
+
+
+.container {
+    text-align: center;
+    margin-top: 100px;
+  }
+
+.container h1{
+    margin: 70px;
+    font-size: 46px;
+    font-family: "Rubik", "helvetica", "sans-serif";
+    text-decoration: underline;
+    text-decoration-style: dashed;
+}
+  
+  #sentence-container {
+    font-size: 20px;
+    margin: 30px;
+  }
+  
+  #user-input {
+    margin-bottom: 10px;
+    height: 50px;
+    width: 500px;
+    padding: 20px;
+  }
+
+.container button{
+    height: 50px;
+    width: 100px;
+}
+
+#result
+{
+    color: red;
+    font-size: 30px;
+    margin: 20px;
+}
+
+  </style>
+  
+</head>
+<body>
+   
+  <header>
+    <div class="navbar">
+        <div id="logo">
+          AI based <br>Learner Bot
+        </div>
+        <button id="contact" onclick="javascript:history.back()">BACK</button>
+    </div>
+  </header>
+
+  <div class="container" id="container">
+    <h1>Scrambled Sentences</h1>
+    <div id="sentence-container"></div>
+    <input type="text" id="user-input" placeholder="Type your answer">
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="nextQuestion()">Next</button>
+    <p id="result"></p>
+  </div>
+
+  <!-- <script src="set.js"></script> -->
+
+  <script>
+
+const sentences = [
+    "The quick brown fox jumps over the lazy dog",
+    "Stack Overflow is a question and answer site for professional and enthusiast programmers",
+    "Python is a high-level programming language with dynamic semantics",
+    "Artificial Intelligence is intelligence demonstrated by machines"
+  ];
+  
+  let currentSentenceIndex = 0;
+  let currentSentence = '';
+  let correctAnswers = 0;
+  let totalQuestions = sentences.length;
+  let isAnswered = false;
+  
+  function shuffleSentence(sentence) {
+    const words = sentence.split(' ');
+    for (let i = words.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [words[i], words[j]] = [words[j], words[i]];
+    }
+    return words.join(' ');
+  }
+  
+  function displaySenatence() {
+    currentSentence = sentences[currentSentenceIndex];
+    const scrambledSentence = shuffleSentence(currentSentence);
+    document.getElementById('sentence-container').innerText = scrambledSentence;
+    updateNextButtonState(); // Update next button state
+    isAnswered = false; // Reset answer status for new question
+  }
+  
+  function checkAnswer() {
+    const userInput = document.getElementById('user-input').value;
+    const isCorrect = userInput.trim().toLowerCase() === currentSentence.toLowerCase();
+    if (isCorrect) {
+      document.getElementById('result').innerText = 'Correct!';
+      correctAnswers++;
+    } else {
+      document.getElementById('result').innerText = 'Incorrect. Try again!';
+    }
+    isAnswered = true; // Mark question as answered
+    updateNextButtonState(); // Update next button state
+  }
+  
+  function updateNextButtonState() {
+    const nextButton = document.getElementById('next-btn');
+    nextButton.disabled = !isAnswered; // Disable next button if the question has not been answered
+  }
+  
+  function nextQuestion() {
+    if (!isAnswered) return; // Check if the question has been answered before proceeding
+    currentSentenceIndex++;
+    if (currentSentenceIndex < totalQuestions) {
+      displaySentence();
+      document.getElementById('result').innerText = '';
+      document.getElementById('user-input').value = '';
+    } else {
+      // End of all questions
+      document.getElementById('container').innerHTML = `
+        <h1>Quiz Completed!</h1>
+        <p>Total Questions: ${totalQuestions}</p>
+        <p>Correct Answers: ${correctAnswers}</p>
+        <p>Incorrect Answers: ${totalQuestions - correctAnswers}</p>
+      `;
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    displaySentence();
+  });
+  
+  </script>
+
+
+</body>
+</html>
